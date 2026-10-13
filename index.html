@@ -320,163 +320,49 @@
   /* 单文件时居中显示 */
   .finder-grid.single { justify-content: center; }
 
-  /* ───────── my dance：本地视频播放卡片 ───────── */
-  .finder-grid.dance-video-list { flex-direction: column; gap: 18px; align-items: center; }
+  /* ───────── my dance：视频文字链接卡片 ───────── */
+  .finder-grid.dance-video-list { flex-direction: column; gap: 16px; align-items: center; }
   .dance-video-card {
     width: 100%;
-    max-width: 460px;
-    padding: 14px 16px 12px;
+    max-width: 520px;
+    padding: 18px 20px;
     border-radius: 14px;
     background: rgba(255, 255, 255, 0.8);
     border: 1px solid rgba(140, 110, 220, 0.18);
     box-shadow: 0 6px 18px rgba(120, 80, 180, 0.12);
+    transition: transform .18s, box-shadow .18s, border-color .18s;
+  }
+  .dance-video-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(120, 80, 180, 0.2);
+    border-color: rgba(176, 108, 255, 0.45);
   }
   .dance-video-name {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
     color: #4a4460;
     line-height: 1.4;
-    margin-bottom: 10px;
   }
-  .dance-video-card video {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border-radius: 10px;
-    background: #0d0a18;
-    display: block;
-    outline: none;
-  }
-  .dance-video-missing {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border-radius: 10px;
-    background: linear-gradient(140deg, #b79bff, #ff9fc4 60%, #ffc48a);
-    color: #fff;
-    font-size: 13px;
-    font-weight: 600;
-    text-align: center;
-    line-height: 1.7;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-shadow: 0 1px 6px rgba(60, 30, 110, 0.35);
-  }
-  .dance-video-missing small { font-size: 11px; font-weight: 400; opacity: 0.92; }
   .dance-video-desc {
+    display: inline-block;
     font-size: 11px;
-    color: #8d87a5;
-    margin-top: 8px;
-    text-align: center;
-  }
-  /* 正在播放的卡片：高亮 + 标注，直观显示互斥 */
-  .dance-video-card.dance-playing {
-    background: #fff;
-    border-color: rgba(176, 108, 255, 0.55);
-    box-shadow: 0 10px 26px rgba(120, 80, 180, 0.22);
-  }
-  .dance-video-card.dance-playing .dance-video-name::after {
-    content: " · Playing";
+    font-weight: 600;
     color: #b06cff;
-    font-size: 11px;
-    font-weight: 600;
+    background: rgba(176, 108, 255, 0.12);
+    border-radius: 6px;
+    padding: 2px 8px;
+    margin: 8px 0 10px;
   }
-  .dance-video-card.dance-playing .dance-video-thumb::after {
-    background: rgba(20, 10, 40, 0.02);
-  }
-  /* 卡片视频：显示首帧 + 播放覆盖按钮，点击进放大模式 */
-  .dance-video-thumb {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border-radius: 10px;
-    overflow: hidden;
-    background: #0d0a18;
-    cursor: pointer;
-  }
-  .dance-video-thumb video {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    background: #0d0a18;
+  .dance-video-link {
     display: block;
-    pointer-events: none;   /* 播放统一走弹窗，卡片内不直接播 */
+    font-size: 12px;
+    color: #3d8ef0;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    word-break: break-all;
+    line-height: 1.5;
   }
-  .dance-video-thumb::after {
-    content: "";
-    position: absolute; inset: 0;
-    background: rgba(20, 10, 40, 0.16);
-    transition: background .18s;
-  }
-  .dance-video-card:hover .dance-video-thumb::after { background: rgba(20, 10, 40, 0.02); }
-  .dance-video-playbtn {
-    position: absolute;
-    z-index: 2;
-    left: 50%; top: 50%;
-    transform: translate(-50%, -50%);
-    width: 52px; height: 52px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.94);
-    color: #d6336c;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 19px;
-    padding-left: 4px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.32);
-    transition: transform .18s;
-    pointer-events: none;
-  }
-  .dance-video-card:hover .dance-video-playbtn { transform: translate(-50%, -50%) scale(1.1); }
-  .dance-video-thumb .dance-video-missing { pointer-events: none; }
-
-  /* ───────── 视频放大播放弹窗（非全屏，一次只播一个） ───────── */
-  .video-lightbox {
-    position: fixed;
-    inset: 0;
-    z-index: 1500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(24, 12, 46, 0.55);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .25s ease;
-  }
-  .video-lightbox.open { opacity: 1; pointer-events: auto; }
-  .video-lightbox-box {
-    width: min(1060px, 92vw, calc(84vh * 16 / 9));
-    border-radius: 16px;
-    overflow: hidden;
-    background: #fff;
-    box-shadow: 0 30px 90px rgba(20, 8, 50, 0.5);
-    transform: scale(0.86) translateY(16px);
-    transition: transform .28s cubic-bezier(.2, .9, .3, 1.2);
-  }
-  .video-lightbox.open .video-lightbox-box { transform: scale(1) translateY(0); }
-  .video-lightbox-bar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 14px;
-    background: linear-gradient(180deg, #f7f5ff, #efeaff);
-    border-bottom: 1px solid rgba(140, 110, 220, 0.15);
-  }
-  .video-lightbox-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: #4a4460;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .video-lightbox-frame video {
-    width: 100%;
-    max-height: calc(84vh - 42px);
-    aspect-ratio: 16 / 9;
-    background: #0d0a18;
-    display: block;
-    outline: none;
-  }
+  .dance-video-link:hover { color: #b06cff; }
 
   /* PDF 文件卡片 */
   .pdf-card {
@@ -896,7 +782,7 @@
       <div class="nav-btn">‹</div>
       <div class="nav-btn">›</div>
       <div class="finder-title">my dance</div>
-      <div class="finder-sub">3 videos · local playback</div>
+      <div class="finder-sub">3 videos · watch on YouTube</div>
     </div>
     <div class="finder-grid" id="dance-grid"></div>
   </div>
@@ -973,9 +859,9 @@
    ============================================================== */
 
 const DANCE_VIDEOS = [
-  { title: "Dance Film: Reclaiming Her",            desc: "Dance Film", src: "video1.mp4" },
-  { title: "Cry Me a River: Ideas are Bulletproof", desc: "Performance", src: "video2.mp4" },
-  { title: "Lullaby",                               desc: "Performance", src: "video3.mp4" },
+  { title: "Dance Film: Reclaiming Her",            desc: "Dance Film", url: "https://youtu.be/xJk_5DWUHNE?si=ufBJ3qWm2soxGf5A" },
+  { title: "Cry Me a River: Ideas are Bulletproof", desc: "Performance", url: "https://youtu.be/dEWLmosz_GY?si=eTDSQD343moks2VK" },
+  { title: "Lullaby",                               desc: "Performance", url: "https://youtu.be/WwCRhxFREVg?si=YS1R8g6wdjYWgw9i" },
 ];
 /* Put the three video files (video1.mp4 / video2.mp4 / video3.mp4) in the
    same folder as index.html and they will play. If your filenames differ,
@@ -1242,56 +1128,8 @@ document.addEventListener("fullscreenchange", () => {
 viewer.addEventListener("click", e => { if (e.target === viewer) closeViewer(); });
 document.addEventListener("keydown", e => { if (e.key === "Escape") closeViewer(); });
 
-/* ── 视频放大播放弹窗（点击卡片后放大，非全屏；一次只播一个） ── */
-let danceLb = null;   // { el, frame, video, thumb, card }
-function openDanceLightbox(v, video, thumb, card) {
-  closeDanceLightbox();           // 保证同时只有一个：先暂停并归位上一个
-  video.controls = true;          // 弹窗内带播放条
-  video.muted = false;            // 弹窗内有声播放
 
-  const lb = document.createElement("div");
-  lb.className = "video-lightbox";
-  lb.innerHTML =
-    '<div class="video-lightbox-box">' +
-      '<div class="video-lightbox-bar">' +
-        '<button class="light red" data-lb-close="1"><span>✕</span></button>' +
-        '<div class="video-lightbox-title"></div>' +
-      '</div>' +
-      '<div class="video-lightbox-frame"></div>' +
-    '</div>';
-  lb.querySelector(".video-lightbox-title").textContent = v.title;
-  const frame = lb.querySelector(".video-lightbox-frame");
-
-  // 把卡片里的 video 元素整体搬进弹窗（不重新加载）
-  frame.appendChild(video);
-
-  lb.addEventListener("click", e => {
-    if (e.target === lb || e.target.closest("[data-lb-close]")) closeDanceLightbox();
-  });
-  document.body.appendChild(lb);
-  danceLb = { el: lb, frame, video, thumb, card };
-  card.classList.add("dance-playing");   // 标记当前正在播放的卡片
-
-  requestAnimationFrame(() => lb.classList.add("open"));
-  video.play().catch(() => {});   // 点击手势触发，通常可自动播放
-}
-function closeDanceLightbox() {
-  if (!danceLb) return;
-  const { el, frame, video, thumb, card } = danceLb;
-  danceLb = null;
-  video.pause();                  // 上一个视频立即暂停
-  video.muted = true;             // 回到卡片态恢复静音
-  if (card) card.classList.remove("dance-playing");
-  el.classList.remove("open");
-  // 等动画结束，把 video 搬回卡片缩略位，销毁弹窗
-  setTimeout(() => {
-    if (video.isConnected) thumb.insertBefore(video, thumb.firstChild);
-    el.remove();
-  }, 280);
-}
-document.addEventListener("keydown", e => { if (e.key === "Escape") closeDanceLightbox(); });
-
-/* ── 渲染舞蹈视频卡片（首帧 + 播放按钮，点击弹窗放大播放） ── */
+/* ── 渲染舞蹈视频链接卡片（标题 + 文字链接，点击跳转 YouTube） ── */
 (function buildDance() {
   const grid = document.getElementById("dance-grid");
   grid.classList.add("dance-video-list");
@@ -1303,46 +1141,22 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeDanceLi
     name.className = "dance-video-name";
     name.textContent = v.title;
 
-    // 缩略区：video 只显示首帧（不播），覆盖 ▶ 按钮
-    const thumb = document.createElement("div");
-    thumb.className = "dance-video-thumb";
-
-    const video = document.createElement("video");
-    video.preload = "metadata";     // 只拉元信息 + 首帧
-    video.muted = true;
-    video.playsInline = true;
-    video.setAttribute("disablepictureinpicture", "");
-    if (v.src) video.src = v.src;
-
-    const playBtn = document.createElement("div");
-    playBtn.className = "dance-video-playbtn";
-    playBtn.textContent = "▶";
-
-    thumb.appendChild(video);
-    thumb.appendChild(playBtn);
-
-    // 文件缺失时的提示
-    video.addEventListener("error", () => {
-      const miss = document.createElement("div");
-      miss.className = "dance-video-missing";
-      miss.innerHTML = '🎬<br>Video file not found<br><small>Put \u201c' + (v.src || "video file") +
-        '\u201d in the same folder as index.html</small>';
-      thumb.replaceWith(miss);
-    }, { once: true });
-
-    // 点击卡片任意处 → 打开放大弹窗（内置互斥：先关旧的）
-    card.addEventListener("click", () => {
-      if (!video.isConnected || !video.src) return;   // 缺文件时不响应
-      openDanceLightbox(v, video, thumb, card);
-    });
-
     const desc = document.createElement("div");
     desc.className = "dance-video-desc";
     desc.textContent = v.desc || "";
 
+    // 文字链接：点击在新标签页跳转 YouTube
+    const link = document.createElement("a");
+    link.className = "dance-video-link";
+    link.href = v.url || "#";
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = v.url || "";
+    link.addEventListener("click", e => e.stopPropagation());
+
     card.appendChild(name);
-    card.appendChild(thumb);
     card.appendChild(desc);
+    card.appendChild(link);
     grid.appendChild(card);
   });
 })();
